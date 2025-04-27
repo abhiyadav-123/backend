@@ -7,14 +7,16 @@ const router = require('./routes');
 
 const app = express();
 
-// CORS middleware (allow all origins)
+// CORS middleware to allow all origins
 app.use(cors({
-    origin: "*", // Allow all origins
+    origin: "*", // Allows all origins
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Ensure all methods are allowed
+    allowedHeaders: "Content-Type, Authorization", // Allowed headers
     credentials: true
 }));
 
-// Preflight request handling
-app.options("*", cors()); // Handles OPTIONS requests for preflight CORS checks
+// Handle preflight requests (CORS preflight check)
+app.options("*", cors());
 
 // Middleware setup
 app.use(express.json());
