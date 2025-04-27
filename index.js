@@ -8,7 +8,7 @@ const router = require('./routes')
 
 const app = express()
 app.use(cors({
-    origin : process.env.FRONTEND_URL,
+    origin : "https://frontend-two-jade-59.vercel.app/",
     credentials : true
 }))
 app.use(express.json())
