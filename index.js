@@ -7,11 +7,14 @@ const router = require('./routes');
 
 const app = express();
 
-// CORS middleware
+// CORS middleware (allow all origins)
 app.use(cors({
-    origin: "*", // Make sure this matches your frontend URL
+    origin: "*", // Allow all origins
     credentials: true
 }));
+
+// Preflight request handling
+app.options("*", cors()); // Handles OPTIONS requests for preflight CORS checks
 
 // Middleware setup
 app.use(express.json());
