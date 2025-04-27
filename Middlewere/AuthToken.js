@@ -13,7 +13,7 @@ async function AuthToken(req,res,next){
             })
         }
 
-        jwt.verify(token, process.env.TOKEN_SECRET_KEY, function(err, decoded) {
+        jwt.verify(token, "DJFDKJDJFGOIEJDGJDLKFGJEJROIJLDKGDOGGU", function(err, decoded) {
             console.log(err)
             console.log("decoded",decoded)
             
