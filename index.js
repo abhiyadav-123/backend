@@ -9,7 +9,7 @@ const app = express();
 
 // CORS middleware
 app.use(cors({
-    origin: "https://frontend-two-jade-59.vercel.app", // Make sure this matches your frontend URL
+    origin: "*", // Make sure this matches your frontend URL
     credentials: true
 }));
 
