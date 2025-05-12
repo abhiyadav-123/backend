@@ -7,34 +7,40 @@ const router = require('./routes');
 
 const app = express();
 
-// CORS middleware to allow all origins
+// ✅ Use your deployed frontend domain here
+const allowedOrigin = "https://frontend-two-jade-59.vercel.app";
+
+// ✅ CORS middleware with specific origin and credentials true
 app.use(cors({
-    origin: "*", // Allows all origins
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Ensure all methods are allowed
-    allowedHeaders: "Content-Type, Authorization", // Allowed headers
+    origin: allowedOrigin,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: "Content-Type, Authorization",
     credentials: true
 }));
 
-// Handle preflight requests (CORS preflight check)
-app.options("*", cors());
+// ✅ Preflight (OPTIONS) handling with the same origin & credentials
+app.options("*", cors({
+    origin: allowedOrigin,
+    credentials: true
+}));
 
-// Middleware setup
+// ✅ Middlewares
 app.use(express.json());
 app.use(cookieParser());
 
-// Home route
+// ✅ Test route
 app.get("/", (req, res) => {
     res.send("API is working");
 });
 
-// Use your API routes
+// ✅ Main API router
 app.use("/api", router);
 
-// Export app for Vercel (this is the key change)
+// ✅ Export the app for Vercel serverless function
 module.exports = app;
 
-// Connect to DB and handle serverless function deployment
+// ✅ Connect to DB
 connectDB().then(() => {
     console.log("Connected to DB");
-    // No need for app.listen() in serverless functions
+    // No app.listen() needed for Vercel
 });
