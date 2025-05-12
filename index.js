@@ -4,34 +4,37 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const connectDB = require('./config/db');
 const router = require('./routes');
-const path = require('path');
-
-const rootDir = path.resolve(); // Fixed variable name
 
 const app = express();
 
+// CORS middleware to allow all origins
 app.use(cors({
-    origin: "https://ecommerce-3-1mul.onrender.com",
+    origin: "*", // Allows all origins
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Ensure all methods are allowed
+    allowedHeaders: "Content-Type, Authorization", // Allowed headers
     credentials: true
 }));
+
+// Handle preflight requests (CORS preflight check)
+app.options("*", cors());
+
+// Middleware setup
 app.use(express.json());
 app.use(cookieParser());
 
-// API Routes
-app.use("/api", router);
-
-// Serve frontend
-app.use(express.static(path.join(rootDir, '/frontend/dist')));
-app.get('*', (_, res) => {
-    res.sendFile(path.resolve(rootDir, "frontend", "dist", "index.html"));
+// Home route
+app.get("/", (req, res) => {
+    res.send("API is working");
 });
 
-// Corrected PORT assignment
-const PORT = process.env.PORT || 8080;
+// Use your API routes
+app.use("/api", router);
 
+// Export app for Vercel (this is the key change)
+module.exports = app;
+
+// Connect to DB and handle serverless function deployment
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log("Connected to DB");
-        console.log("Server is running on port " + PORT);
-    });
+    console.log("Connected to DB");
+    // No need for app.listen() in serverless functions
 });
